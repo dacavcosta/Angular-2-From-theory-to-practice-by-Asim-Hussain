@@ -2,6 +2,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Component } from '@angular/core';
+import { Input } from '@angular/core';
 
 class Joke {
     public setup: string;
@@ -20,18 +21,27 @@ class Joke {
 }
 
 @Component({
-    selector: 'joke-list',
+    selector: 'joke',
     template: `
-        <div class="card card-block"
-            *ngFor="let joke of jokes">
-            <h1 class="card-title">{{joke.setup}}</h1>
-            <p class="card-text" [hidden]="joke.hide" >{{joke.punchline}}</p>
-            <a class="btn btn-primary" (click)="joke.togle()">Tell Me</a>
+        <div class="card card-block">
+            <h1 class="card-title">{{data.setup}}</h1>
+            <p class="card-text" [hidden]="data.hide" >{{data.punchline}}</p>
+            <a class="btn btn-warning" (click)="data.togle()">Tell Me</a>
         </div>
     `
 })
+class JokeComponent{
+    @Input('joke') data: Joke;
+}
+
+@Component({
+    selector: 'joke-list',
+    template: `
+        <joke *ngFor="let j of jokes" [joke]="j"></joke>
+    `
+})
 class JokeListComponent{
-    jokes: Object[];
+    jokes: Joke[];
 
     constructor(){
         this.jokes = [
@@ -42,10 +52,25 @@ class JokeListComponent{
     }
 }
 
+@Component({
+    selector: 'app',
+    template: `
+        <joke-list></joke-list>
+    `
+})
+
+class AppComponent {
+
+}
+
 @NgModule({
     imports:[BrowserModule],
-    declarations:[JokeListComponent],
-    bootstrap:[JokeListComponent]
+    declarations:[
+        AppComponent,
+        JokeComponent, 
+        JokeListComponent
+    ],
+    bootstrap:[AppComponent]
 })
 export class AppModule{}
 
