@@ -3,6 +3,22 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
+class Joke {
+    public setup: string;
+    public punchline: string;
+    public hide: boolean;
+
+    constructor(setup: string, punchline: string){
+        this.setup = setup;
+        this.punchline = punchline;
+        this.hide = true;
+    }
+
+    togle(){
+        this.hide = !this.hide;
+    }
+}
+
 @Component({
     selector: 'joke-list',
     template: `
@@ -10,7 +26,7 @@ import { Component } from '@angular/core';
             *ngFor="let joke of jokes">
             <h1 class="card-title">{{joke.setup}}</h1>
             <p class="card-text" [hidden]="joke.hide" >{{joke.punchline}}</p>
-            <a class="btn btn-primary" (click)="togle(joke)">Tell Me</a>
+            <a class="btn btn-primary" (click)="joke.togle()">Tell Me</a>
         </div>
     `
 })
@@ -19,26 +35,10 @@ class JokeListComponent{
 
     constructor(){
         this.jokes = [
-            {
-                setup : "What did the cheese say when it looked in the mirror?",
-                punchline : "Halloumi (hello me)",
-                hide: true
-            },
-            {
-                setup : "What kind of cheese do you use to disguise a small horse?",
-                punchline : "Mask-a-pony (Mascarpone)",
-                hide: true
-            },
-            {
-                setup : "A kid threw a lump of cheddar at me",
-                punchline : "I thought ‘That’s not very mature’",
-                hide: true
-            }
+            new Joke("What did the cheese say when it looked in the mirror?", "Halloumi (hello me)"),
+            new Joke("What kind of cheese do you use to disguise a small horse?", "Mask-a-pony (Mascarpone)"),
+            new Joke("A kid threw a lump of cheddar at me", "I thought ‘That’s not very mature’")
         ];
-    }
-
-    togle(joke){
-        joke.hide = !joke.hide;
     }
 }
 
